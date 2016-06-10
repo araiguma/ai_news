@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,49 +17,67 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9dl-1S-GUW">
-                                <rect key="frame" x="10" y="627" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="2Eq-bi-ovp"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="IpR-lz-Qpf"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46" id="Uer-al-7Ny"/>
-                                    <constraint firstAttribute="height" constant="30" id="hs8-ra-IXh"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSU-9c-CFv">
-                                <rect key="frame" x="265" y="627" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="3Fk-ci-Tqf"/>
-                                    <constraint firstAttribute="height" constant="30" id="y61-fU-r3o"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RHm-VT-KMI">
                                 <rect key="frame" x="0.0" y="20" width="375" height="597"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="447-eV-N7h">
+                                <rect key="frame" x="10" y="627" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="LYU-ku-97d"/>
+                                    <constraint firstAttribute="width" constant="100" id="kod-yk-J8R"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="backbutton"/>
+                                <connections>
+                                    <action selector="クリック戻る:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jJY-k3-lKe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SxQ-hV-S8Y">
+                                <rect key="frame" x="265" y="627" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Cbm-yc-mZ1"/>
+                                    <constraint firstAttribute="height" constant="30" id="eJr-JU-utt"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="prevbutton"/>
+                                <connections>
+                                    <action selector="クリック進む:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O0u-Eo-Ubo"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="447-eV-N7h" firstAttribute="top" secondItem="RHm-VT-KMI" secondAttribute="bottom" constant="10" id="6N1-wE-QQe"/>
                             <constraint firstAttribute="trailing" secondItem="RHm-VT-KMI" secondAttribute="trailing" id="9el-Qo-jxq"/>
                             <constraint firstItem="RHm-VT-KMI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Auf-fe-atm"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9dl-1S-GUW" secondAttribute="bottom" constant="10" id="Dpq-SR-ule"/>
                             <constraint firstItem="RHm-VT-KMI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="IJB-Vj-xbc"/>
-                            <constraint firstItem="9dl-1S-GUW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="IoE-Z4-yVt"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="uSU-9c-CFv" secondAttribute="bottom" constant="10" id="RKN-pT-ZLz"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="uSU-9c-CFv" secondAttribute="trailing" constant="10" id="UZn-Xi-b0x"/>
-                            <constraint firstItem="9dl-1S-GUW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="Z1t-n5-gUo"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="uSU-9c-CFv" secondAttribute="bottom" constant="10" id="dki-hP-0Ml"/>
-                            <constraint firstAttribute="trailing" secondItem="uSU-9c-CFv" secondAttribute="trailing" constant="10" id="niI-gT-fzN"/>
-                            <constraint firstItem="uSU-9c-CFv" firstAttribute="top" secondItem="RHm-VT-KMI" secondAttribute="bottom" constant="10" id="wy2-rT-LHB"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9dl-1S-GUW" secondAttribute="bottom" constant="10" id="x1G-yl-d8E"/>
+                            <constraint firstItem="RHm-VT-KMI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="V6s-g3-tp9"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="SxQ-hV-S8Y" secondAttribute="bottom" constant="10" id="fNx-5i-M2l"/>
+                            <constraint firstAttribute="trailing" secondItem="SxQ-hV-S8Y" secondAttribute="trailing" constant="10" id="kTA-yO-oSL"/>
+                            <constraint firstItem="RHm-VT-KMI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="lrx-yU-lsz"/>
+                            <constraint firstAttribute="trailing" secondItem="RHm-VT-KMI" secondAttribute="trailing" id="oXk-Uk-oe3"/>
+                            <constraint firstItem="447-eV-N7h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="w56-8i-QyE"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="447-eV-N7h" secondAttribute="bottom" constant="10" id="xCv-CD-rW6"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="9el-Qo-jxq"/>
+                                <exclude reference="Auf-fe-atm"/>
+                                <exclude reference="IJB-Vj-xbc"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="イメージ" destination="RHm-VT-KMI" id="E3w-Mg-9aE"/>
+                        <outlet property="クリック進む" destination="SxQ-hV-S8Y" id="X3K-9J-han"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139.5" y="322.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="backbutton" width="100" height="30"/>
+        <image name="prevbutton" width="100" height="30"/>
+    </resources>
 </document>
