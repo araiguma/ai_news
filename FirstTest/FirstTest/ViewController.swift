@@ -20,6 +20,10 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBOutlet weak var myTextField: UITextField!
 
+    @IBAction func TapHandler(sender: AnyObject) {
+        myTextField.text = "変更"
+    }
 }
 
