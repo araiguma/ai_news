@@ -3,45 +3,20 @@ const cheerio = require('cheerio');
 
 class NewsParser {
   async fetchAINews() {
-    const sources = [
-      {
-        name: 'TechCrunch AI',
-        url: 'https://techcrunch.com/category/artificial-intelligence/',
-        selector: '.post-block__title__link',
-        linkSelector: '.post-block__title__link'
-      },
-      {
-        name: 'VentureBeat AI',
-        url: 'https://venturebeat.com/ai/',
-        selector: '.ArticleListing__title',
-        linkSelector: 'a'
-      },
-      {
-        name: 'MIT Technology Review AI',
-        url: 'https://www.technologyreview.com/topic/artificial-intelligence/',
-        selector: '.teaserItem__title',
-        linkSelector: 'a'
-      }
-    ];
-
-    const allNews = [];
-
-    for (const source of sources) {
-      try {
-        console.log(`Fetching news from ${source.name}...`);
-        const news = await this.fetchFromSource(source);
-        allNews.push(...news);
-      } catch (error) {
-        console.error(`Error fetching from ${source.name}:`, error.message);
-      }
+    try {
+      console.log('はてなブックマークからAI開発関連記事を取得中...');
+      const news = await this.fetchFromHatenaBookmarks();
+      return news.slice(0, 10);
+    } catch (error) {
+      console.error('はてなブックマーク取得エラー:', error.message);
+      return [];
     }
-
-    return allNews.slice(0, 10);
   }
 
-  async fetchFromSource(source) {
+  async fetchFromHatenaBookmarks() {
     try {
-      const response = await axios.get(source.url, {
+      const url = 'https://b.hatena.ne.jp/q/AI?date_range=5y&target=tag&sort=popular&users=50';
+      const response = await axios.get(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
@@ -50,39 +25,52 @@ class NewsParser {
       const $ = cheerio.load(response.data);
       const articles = [];
 
-      $(source.selector).each((index, element) => {
-        if (index >= 5) return false;
+      $('.entrylist-item').each((index, element) => {
+        if (index >= 20) return false;
 
-        const title = $(element).text().trim();
-        let link = '';
+        const titleElement = $(element).find('.entrylist-contents-title a');
+        const title = titleElement.text().trim();
+        const link = titleElement.attr('href');
+        const description = $(element).find('.entrylist-contents-description').text().trim();
+        const users = $(element).find('.entrylist-contents-users').text().trim();
 
-        if (source.linkSelector) {
-          const linkElement = $(element).find(source.linkSelector).first();
-          link = linkElement.attr('href') || $(element).attr('href') || '';
-        } else {
-          link = $(element).attr('href') || '';
-        }
-
-        if (link && !link.startsWith('http')) {
-          const baseUrl = new URL(source.url).origin;
-          link = baseUrl + link;
-        }
-
-        if (title && link) {
+        if (title && link && this.isDevRelated(title, description)) {
           articles.push({
             title,
             link,
-            source: source.name,
+            source: 'はてなブックマーク',
+            description: description || '',
+            users: users || '',
             date: new Date().toISOString().split('T')[0]
           });
         }
       });
 
+      console.log(`開発関連記事を${articles.length}件発見しました`);
       return articles;
     } catch (error) {
-      console.error(`Error parsing ${source.name}:`, error.message);
+      console.error('はてなブックマーク解析エラー:', error.message);
       return [];
     }
+  }
+
+  isDevRelated(title, description) {
+    const devKeywords = [
+      'API', 'SDK', 'ライブラリ', 'フレームワーク', 'プログラミング', 'コード', '開発', 
+      'GitHub', 'オープンソース', 'Python', 'JavaScript', 'TypeScript', 'React', 
+      'Node.js', 'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure',
+      'TensorFlow', 'PyTorch', 'Hugging Face', 'OpenAI API', 'LangChain',
+      'RAG', 'ベクトル', 'エンベディング', 'ファインチューニング', 'プロンプト',
+      'チャットボット', '実装', 'チュートリアル', 'ハンズオン', 'サンプル',
+      '技術', 'エンジニア', 'プログラマー', 'デベロッパー', 'アプリ開発',
+      'Webアプリ', 'モバイルアプリ', 'CLI', 'ツール', 'プラグイン'
+    ];
+
+    const text = (title + ' ' + description).toLowerCase();
+    return devKeywords.some(keyword => 
+      text.includes(keyword.toLowerCase()) || 
+      text.includes(keyword)
+    );
   }
 
   formatNewsForEmail(newsArray) {
@@ -98,9 +86,9 @@ class NewsParser {
     let html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
-          🤖 今日のAIニュース (${today})
+          🤖 AI開発ニュース (${today})
         </h2>
-        <p style="color: #7f8c8d;">本日の注目すべきAI関連ニュースをお届けします。</p>
+        <p style="color: #7f8c8d;">はてなブックマークから開発に関わるAI記事を厳選してお届けします。</p>
     `;
 
     newsArray.forEach((article, index) => {
@@ -111,8 +99,9 @@ class NewsParser {
               ${index + 1}. ${article.title}
             </a>
           </h3>
+          ${article.description ? `<p style="margin: 10px 0; color: #555; font-size: 14px; line-height: 1.4;">${article.description}</p>` : ''}
           <p style="margin: 5px 0; color: #7f8c8d; font-size: 14px;">
-            📰 ソース: ${article.source}
+            📰 ${article.source} ${article.users ? `| 👥 ${article.users}` : ''}
           </p>
           <a href="${article.link}" style="color: #3498db; text-decoration: none; font-weight: bold;">
             記事を読む →
@@ -131,7 +120,7 @@ class NewsParser {
     `;
 
     return {
-      subject: `🤖 今日のAIニュース - ${today} (${newsArray.length}件)`,
+      subject: `🤖 AI開発ニュース - ${today} (${newsArray.length}件)`,
       html: html
     };
   }
